@@ -42,9 +42,9 @@ require("lazy").setup({
 	config = function()
 	   local builtin = require('telescope.builtin')
 	   -- Press Space + f + f to find files
-	   vim.keymap.set('n', 'ff', builtin.find_files, {})
+	   vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 	   -- Press Space + f + g to search text inside files
-	   vim.keymap.set('n', 'fg', builtin.live_grep, {})
+	   vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 	end
     }
 })
