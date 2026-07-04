@@ -136,4 +136,49 @@ require("lazy").setup({
         vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { silent = true })
       end
     },
+
+    -- 7. Toggleable Terminal (toggleterm.nvim)
+    {
+      "akinsho/toggleterm.nvim",
+      version = "*",
+      config = function()
+        local toggleterm = require("toggleterm")
+        
+        toggleterm.setup({
+          size = function(term)
+            if term.direction == "horizontal" then
+              return 15
+            elseif term.direction == "vertical" then
+              -- Takes up 40% of the screen width when opened vertically
+              return vim.o.columns * 0.4
+            end
+          end,
+          float_opts = {
+            border = "curved",
+          },
+        })
+
+        -- Keymaps
+        -- 1. Ctrl + t opens the Floating Terminal
+        vim.keymap.set({'n', 't'}, '<C-t>', function() 
+          toggleterm.toggle(1, nil, nil, 'float') 
+        end, { desc = "Toggle Floating Terminal" })
+
+        -- 2. Space + t opens a Vertical Panel on the side
+        vim.keymap.set({'n', 't'}, '<leader>t', function() 
+          toggleterm.toggle(2, nil, nil, 'vertical') 
+        end, { desc = "Toggle Vertical Side Terminal" })
+
+        -- Terminal navigation helpers (keeps window navigation seamless)
+        function _G.set_terminal_keymaps()
+          local opts = { buffer = 0 }
+          vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+          vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+          vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+          vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+        end
+        vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+      end
+    },
+
 })
