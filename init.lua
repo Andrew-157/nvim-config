@@ -15,6 +15,9 @@ vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = "Move focus to the right window"
 vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = "Move focus to the lower window" })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = "Move focus to the upper window" })
 
+vim.opt.splitright = true  -- Open vertical splits to the right
+vim.opt.splitbelow = true  -- Open horizontal splits below
+
 -- Plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -101,5 +104,36 @@ require("lazy").setup({
         -- Minus (-) edits the current file's directory like a text file
         vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
       end,
+    },
+
+    -- Window picker
+    {
+      "nvim-neo-tree/neo-tree.nvim",
+      branch = "v3.x",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "MunifTanjim/nui.nvim",
+        -- Add the window picker here!
+        {
+          "s1n7ax/nvim-window-picker",
+          version = "2.*",
+          config = function()
+            require("window-picker").setup({
+              filter_rules = {
+                autoselect_one = true, -- Automatically pick if there's only one window open
+                include_current_win = false,
+                bo = {
+                  filetype = { "neo-tree", "neo-tree-popup", "notify" },
+                  buftype = { "terminal", "quickfix" },
+                },
+              },
+            })
+          end,
+        },
+      },
+      config = function()
+        vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { silent = true })
+      end
     },
 })
