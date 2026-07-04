@@ -46,5 +46,28 @@ require("lazy").setup({
 	   -- Press Space + f + g to search text inside files
 	   vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 	end
+    },
+
+    -- Status bar
+    {
+	"echasnovski/mini.statusline",
+	version = false,
+	config = function()
+	    require("mini.statusline").setup()
+	end
+    },
+
+    -- Git blame and signs
+    {
+	"lewis6991/gitsigns.nvim",
+    	config = function()
+    	  require("gitsigns").setup({
+    	    current_line_blame = true, -- Shows git blame on the current line
+    	    current_line_blame_opts = {
+    	      delay = 300, -- Wait 300ms before showing the blame text
+    	    },
+    	  })
+    	end
     }
+
 })
